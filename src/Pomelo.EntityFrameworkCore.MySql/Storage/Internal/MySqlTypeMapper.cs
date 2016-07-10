@@ -123,18 +123,11 @@ namespace Microsoft.EntityFrameworkCore.Storage.Internal
         {
             Check.NotNull(clrType, nameof(clrType));
 
-            if (clrType == typeof(string))
-            {
-                return _varcharmax;
-            }
-            else if (clrType == typeof(byte[]))
-            {
-                return _varbinarymax;
-            }
-            else
-            {
-                return GetClrTypeMappings()[clrType];
-            }
+            return clrType == typeof(string)
+                ? _varcharmax
+                : (clrType == typeof(byte[])
+                    ? _varbinarymax
+                    : base.FindMapping(clrType));
         }
 
         public override RelationalTypeMapping FindMapping(IProperty property)
