@@ -417,9 +417,9 @@ namespace Pomelo.Data.MySql
         return null;
       firstResult = false;
 
-      int affectedRows = -1;
+      var affectedRows = -1L;
       long insertedId = -1;
-      int fieldCount = GetResult(statementId, ref affectedRows, ref insertedId);
+      var fieldCount = GetResult(statementId, ref affectedRows, ref insertedId);
       if (fieldCount == -1)
         return null;
       if (fieldCount > 0)
@@ -428,7 +428,7 @@ namespace Pomelo.Data.MySql
         return new ResultSet(affectedRows, insertedId);
     }
 
-    protected virtual int GetResult(int statementId, ref int affectedRows, ref long insertedId)
+    protected virtual long GetResult(int statementId, ref long affectedRows, ref long insertedId)
     {
       return handler.GetResult(ref affectedRows, ref insertedId);
     }
@@ -451,7 +451,7 @@ namespace Pomelo.Data.MySql
       NextResult(0, false);
     }
 
-    public MySqlField[] GetColumns(int count)
+    public MySqlField[] GetColumns(long count)
     {
       MySqlField[] fields = new MySqlField[count];
       for (int i = 0; i < count; i++)
@@ -565,7 +565,7 @@ namespace Pomelo.Data.MySql
     void SendQuery(MySqlPacket packet);
     void Close(bool isOpen);
     bool Ping();
-    int GetResult(ref int affectedRows, ref long insertedId);
+    long GetResult(ref long affectedRows, ref long insertedId);
     bool FetchDataRow(int statementId, int columns);
     int PrepareStatement(string sql, ref MySqlField[] parameters);
     void ExecuteStatement(MySqlPacket packet);

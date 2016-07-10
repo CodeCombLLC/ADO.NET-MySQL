@@ -61,11 +61,11 @@ namespace Pomelo.Data.MySql
             Resources.TraceQueryNormalized, driverId, ThreadID, normalized_query);
     }
 
-    protected override int GetResult(int statementId, ref int affectedRows, ref long insertedId)
+    protected override long GetResult(int statementId, ref long affectedRows, ref long insertedId)
     {
       try
       {
-        int fieldCount = base.GetResult(statementId, ref affectedRows, ref insertedId);
+        var fieldCount = base.GetResult(statementId, ref affectedRows, ref insertedId);
         MySqlTrace.TraceEvent(TraceEventType.Information, MySqlTraceEventType.ResultOpened,
             Resources.TraceResult, driverId, fieldCount, affectedRows, insertedId);
 

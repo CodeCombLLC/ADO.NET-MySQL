@@ -538,7 +538,7 @@ namespace Pomelo.Data.MySql
             }
         }
 
-        public int GetResult(ref int affectedRow, ref long insertedId)
+        public long GetResult(ref long affectedRow, ref long insertedId)
         {
             try
             {
@@ -556,7 +556,7 @@ namespace Pomelo.Data.MySql
                 throw;
             }
 
-            int fieldCount = (int)packet.ReadFieldLength();
+            var fieldCount = (long)packet.ReadFieldLength();
             if (-1 == fieldCount)
             {
                 string filename = packet.ReadString();

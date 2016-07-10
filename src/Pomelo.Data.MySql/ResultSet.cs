@@ -25,7 +25,7 @@ namespace Pomelo.Data.MySql
     private bool isSequential;
     private int seqIndex;
     private bool isOutputParameters;
-    private int affectedRows;
+    private long affectedRows;
     private long insertedId;
     private int statementId;
     private int totalRows;
@@ -33,14 +33,14 @@ namespace Pomelo.Data.MySql
     private bool cached;
     private List<IMySqlValue[]> cachedValues;
 
-    public ResultSet(int affectedRows, long insertedId)
+    public ResultSet(long affectedRows, long insertedId)
     {
       this.affectedRows = affectedRows;
       this.insertedId = insertedId;
       readDone = true;
     }
 
-    public ResultSet(Driver d, int statementId, int numCols)
+    public ResultSet(Driver d, int statementId, long numCols)
     {
       affectedRows = -1;
       insertedId = -1;
@@ -81,7 +81,7 @@ namespace Pomelo.Data.MySql
       set { isOutputParameters = value; }
     }
 
-    public int AffectedRows
+    public long AffectedRows
     {
       get { return affectedRows; }
     }
@@ -301,7 +301,7 @@ namespace Pomelo.Data.MySql
     /// <summary>
     /// Loads the column metadata for the current resultset
     /// </summary>
-    private void LoadColumns(int numCols)
+    private void LoadColumns(long numCols)
     {
       fields = driver.GetColumns(numCols);
 
