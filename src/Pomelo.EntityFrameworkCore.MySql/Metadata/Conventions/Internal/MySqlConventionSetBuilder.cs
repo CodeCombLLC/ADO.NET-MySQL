@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Microsoft.EntityFrameworkCore.Metadata.Conventions
 {
-    public class NpgsqlConventionSetBuilder : RelationalConventionSetBuilder
+    public class MySqlConventionSetBuilder : RelationalConventionSetBuilder
     {
-        public NpgsqlConventionSetBuilder(
+        public MySqlConventionSetBuilder(
             [NotNull] IRelationalTypeMapper typeMapper,
             [CanBeNull] ICurrentDbContext currentContext,
             [CanBeNull] IDbSetFinder setFinder)

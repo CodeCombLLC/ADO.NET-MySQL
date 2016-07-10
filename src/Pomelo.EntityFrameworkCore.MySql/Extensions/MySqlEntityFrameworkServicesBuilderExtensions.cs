@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
 using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal;
@@ -40,6 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddSingleton<MySqlModelSource>()
                 .AddSingleton<MySqlAnnotationProvider>()
                 .AddSingleton<MySqlMigrationsAnnotationProvider>()
+               .AddScoped<MySqlConventionSetBuilder>()
                 .AddScoped<IMySqlUpdateSqlGenerator, MySqlUpdateSqlGenerator>()
                 .AddScoped<MySqlModificationCommandBatchFactory>()
                 .AddScoped<MySqlDatabaseProviderServices>()

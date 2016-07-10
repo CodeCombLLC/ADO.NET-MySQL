@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
@@ -43,6 +44,7 @@ namespace Microsoft.EntityFrameworkCore.Storage.Internal
         public override IUpdateSqlGenerator UpdateSqlGenerator => GetService<MySqlUpdateSqlGenerator>();
         public override IValueGeneratorCache ValueGeneratorCache => GetService<MySqlValueGeneratorCache>();
         public override IRelationalTypeMapper TypeMapper => GetService<MySqlTypeMapper>();
+        public override IConventionSetBuilder ConventionSetBuilder => GetService<MySqlConventionSetBuilder>();
         public override IModificationCommandBatchFactory ModificationCommandBatchFactory => GetService<MySqlModificationCommandBatchFactory>();
         public override IRelationalValueBufferFactoryFactory ValueBufferFactoryFactory => GetService<TypedRelationalValueBufferFactoryFactory>();
         public override IRelationalAnnotationProvider AnnotationProvider => GetService<MySqlAnnotationProvider>();
