@@ -553,6 +553,7 @@ namespace Pomelo.Data.MySql
             catch (Exception)
             {
                 serverStatus = 0;
+
                 throw;
             }
 

@@ -108,6 +108,7 @@ namespace Microsoft.EntityFrameworkCore.Migrations
             else if (isSerial)
             {
                 builder.Append(" SET DEFAULT ");
+                
                 switch (type)
                 {
                     case "smallint":
@@ -120,6 +121,7 @@ namespace Microsoft.EntityFrameworkCore.Migrations
                         //Until this is resolved changing IsIdentity from false to true
                         //on types int2, int4 and int8 won't switch to type serial2, serial4 and serial8
                         throw new NotImplementedException("Not supporting creating sequence for integer types");
+                    case "char(38)":
                     case "uuid":
                     case "uniqueidentifier":
                         builder.Append("UUID()");
@@ -318,7 +320,11 @@ namespace Microsoft.EntityFrameworkCore.Migrations
                         break;
                     case "varchar": // Allow string identifier
                         break;
+                    case "char(38)": // GUID identifier
+                        break;
                     default:
+                        if (type.IndexOf("varchar") >= 0)
+                            break;
                         throw new InvalidOperationException($"Column {name} of type {type} can't be Identity");
                 }
             }
