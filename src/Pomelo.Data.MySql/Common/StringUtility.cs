@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+
+namespace Pomelo.Data.MySql
+{
+  public class StringUtility
+  {
+    public static string ToUpperInvariant(string s)
+    {
+      return s.ToUpperInvariant();
+    }
+
+    public static string ToLowerInvariant(string s)
+    {
+      return s.ToLowerInvariant();
+    }
+  }
+}
