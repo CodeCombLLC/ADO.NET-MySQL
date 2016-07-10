@@ -16,7 +16,7 @@ namespace MySqlTest
         [MaxLength(64)]
         public string Name { get; set; }
     }
-
+    
     public class Blog
     {
         public Guid Id { get; set; }
@@ -50,21 +50,20 @@ namespace MySqlTest
         {
             using (var context = new MyContext())
             {
+                // Create database
                 context.Database.EnsureCreated();
 
-                var blog = new Blog() { Title = "Blog Titlle" };
-
-                Console.WriteLine("Adding...");
-                context.Add(blog);
-
-                Console.WriteLine("Saving...");
+                // Init sample data
+                var user = new User { Name = "Yuuko" };
+                context.Add(user);
                 context.SaveChanges();
+                // Issue #1: DataReader conflicted
+                var blog = new Blog { Title = "Blog Title", UserId = user.Id };
+                context.Add(blog);
+                context.SaveChanges();
+
+                // Detect changes test
                 blog.Title = "Changed Title";
-
-                Console.WriteLine("Detecting change...");
-                context.ChangeTracker.DetectChanges();
-
-                Console.WriteLine("Saving...");
                 context.SaveChanges();
             }
         }
