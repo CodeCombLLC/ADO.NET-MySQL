@@ -18,7 +18,7 @@ using System.Threading;
 
 namespace Pomelo.Data.MySql
 {
-    public sealed partial class MySqlConnection : IDisposable
+    public partial class MySqlConnection : IDisposable
     {
         internal ConnectionState connectionState;
         internal Driver driver;
@@ -81,7 +81,7 @@ namespace Pomelo.Data.MySql
 
         internal MySqlConnectionStringBuilder Settings { get; private set; }
 
-        internal MySqlDataReader Reader
+        public MySqlDataReader Reader
         {
             get
             {

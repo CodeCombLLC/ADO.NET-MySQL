@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -13,9 +14,11 @@ using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.EntityFrameworkCore.Query.Sql.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Update;
 using Microsoft.EntityFrameworkCore.Update.Internal;
 using Microsoft.EntityFrameworkCore.Utilities;
 using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
@@ -40,7 +43,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddSingleton<MySqlModelSource>()
                 .AddSingleton<MySqlAnnotationProvider>()
                 .AddSingleton<MySqlMigrationsAnnotationProvider>()
-               .AddScoped<MySqlConventionSetBuilder>()
+                .AddScoped<MySqlBatchExecutor>()
+                .AddScoped(p => GetProviderServices(p).BatchExecutor)
+                .AddScoped<MySqlConventionSetBuilder>()
                 .AddScoped<IMySqlUpdateSqlGenerator, MySqlUpdateSqlGenerator>()
                 .AddScoped<MySqlModificationCommandBatchFactory>()
                 .AddScoped<MySqlDatabaseProviderServices>()
@@ -61,6 +66,19 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddScoped<MySqlCompositeMemberTranslator>()
                 .AddScoped<MySqlCompositeMethodCallTranslator>()
                 .AddScoped<MySqlQuerySqlGenerationHelperFactory>();
+        }
+
+        private static IRelationalDatabaseProviderServices GetProviderServices(IServiceProvider serviceProvider)
+        {
+            var providerServices = serviceProvider.GetRequiredService<IDbContextServices>().DatabaseProviderServices
+                as IRelationalDatabaseProviderServices;
+
+            if (providerServices == null)
+            {
+                throw new InvalidOperationException(RelationalStrings.RelationalNotInUse);
+            }
+
+            return providerServices;
         }
     }
 }

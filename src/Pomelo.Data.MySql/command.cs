@@ -424,14 +424,14 @@ namespace Pomelo.Data.MySql
             lock (driver)
             {
 
-                // We have to recheck that there is no reader, after we got the lock
-                //if (connection.Reader != null)
-                //{
-                //    Throw(new MySqlException(Resources.DataReaderOpen));
-                //}
+                //We have to recheck that there is no reader, after we got the lock
+                if (connection.Reader != null)
+                    {
+                        Throw(new MySqlException(Resources.DataReaderOpen));
+                    }
 
 #if !NETSTANDARD1_6
-        System.Transactions.Transaction curTrans = System.Transactions.Transaction.Current;
+                System.Transactions.Transaction curTrans = System.Transactions.Transaction.Current;
 
         if (curTrans != null)
         {

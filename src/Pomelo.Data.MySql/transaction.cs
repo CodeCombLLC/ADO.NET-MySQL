@@ -85,12 +85,6 @@ namespace Pomelo.Data.MySql
                 throw new InvalidOperationException("Connection must be valid and open to commit transaction");
             if (!open)
                 throw new InvalidOperationException("Transaction has already been committed or is not pending");
-            if (conn.Reader != null)
-            {
-                conn.Reader.Dispose();
-                GC.SuppressFinalize(0);
-                conn.Reader = null;
-            }
             MySqlCommand cmd = new MySqlCommand("COMMIT", conn);
             cmd.ExecuteNonQuery();
             open = false;

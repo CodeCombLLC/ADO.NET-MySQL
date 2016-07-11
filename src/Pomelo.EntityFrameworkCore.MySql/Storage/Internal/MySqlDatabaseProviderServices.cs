@@ -33,6 +33,7 @@ namespace Microsoft.EntityFrameworkCore.Storage.Internal
         }
 
         public override string InvariantName => GetType().GetTypeInfo().Assembly.GetName().Name;
+        public override IBatchExecutor BatchExecutor => GetService<MySqlBatchExecutor>();
         public override IDatabaseCreator Creator => GetService<MySqlDatabaseCreator>();
         public override IRelationalConnection RelationalConnection => GetService<MySqlRelationalConnection>();
         public override ISqlGenerationHelper SqlGenerationHelper => GetService<MySqlSqlGenerationHelper>();

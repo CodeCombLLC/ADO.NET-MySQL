@@ -56,8 +56,6 @@ namespace MySqlTest
                 // Init sample data
                 var user = new User { Name = "Yuuko" };
                 context.Add(user);
-                context.SaveChanges();
-                // Issue #1: DataReader conflicted
                 var blog = new Blog { Title = "Blog Title", UserId = user.Id };
                 context.Add(blog);
                 context.SaveChanges();

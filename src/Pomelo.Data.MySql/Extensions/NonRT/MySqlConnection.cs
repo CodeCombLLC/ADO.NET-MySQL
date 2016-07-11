@@ -14,7 +14,7 @@ namespace Pomelo.Data.MySql
   //[ToolboxBitmap(typeof(MySqlConnection), "MySqlClient.resources.connection.bmp")]
   [DesignerCategory("Code")]
   // [ToolboxItem(true)]
-  public sealed partial class MySqlConnection : DbConnection, ICloneable
+  public partial class MySqlConnection : DbConnection, ICloneable
   {
         /// <summary>
         /// Returns schema information for the data source of this <see cref="DbConnection"/>. 
