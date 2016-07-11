@@ -2,7 +2,7 @@
 
 You can access this library by using MyGet Feed: `https://www.myget.org/F/pomelo/api/v2/`
 
-### MySQL for ADO.NET Core
+## MySQL for ADO.NET Core
 
 After adding myget feed, you can put `Pomelo.Data.MySql` into your `project.json`, and the version should be `1.0.0`.
 
@@ -30,7 +30,7 @@ namespace MySqlAdoSample
 }
 ```
 
-### MySQL for Entity Framework Core
+## MySQL for Entity Framework Core
 
 You can also use mysql in Entity Framework Core now, We have implemented MySQL Entity Framework Core interfaces. By using a few of lines to use Entity Framework Core with MySQL database, There is a console application sample for accessing MySQL database by using Entity Framework:
 
@@ -121,10 +121,10 @@ namespace MySqlTest
 
 Besides, you can view a full project which is a single-user blog system, it was based on this library(MySQL for Entity Framework Core): [View on GitHub](https://github.com/kagamine/yuukoblog-netcore-mysql)
 
-### Contribution
+## Contribution
 
 One of the easiest ways to contribute is to participate in discussions and discuss issues. You can also contribute by submitting pull requests with code changes.
 
-### License
+## License
 
 [MIT](https://github.com/CodeCombLLC/ADO.NET-MySQL/blob/master/LICENSE)
