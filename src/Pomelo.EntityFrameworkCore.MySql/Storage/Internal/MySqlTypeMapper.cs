@@ -40,10 +40,10 @@ namespace Microsoft.EntityFrameworkCore.Storage.Internal
         private readonly RelationalTypeMapping _varcharmax = new MySqlMaxLengthMapping("longtext", typeof(string), DbType.AnsiString);
         
         private readonly MySqlMaxLengthMapping _varchar = new MySqlMaxLengthMapping("varchar", typeof(string), DbType.AnsiString);
-        private readonly MySqlMaxLengthMapping _varchar450 = new MySqlMaxLengthMapping("varchar(450)", typeof(string), DbType.AnsiString);
+        private readonly MySqlMaxLengthMapping _varchar450 = new MySqlMaxLengthMapping("longtext", typeof(string), DbType.AnsiString);
         private readonly RelationalTypeMapping _varbinary = new RelationalTypeMapping("varbinary", typeof(byte[]), DbType.Binary);
-        private readonly MySqlMaxLengthMapping _varbinary450 = new MySqlMaxLengthMapping("varbinary(450)", typeof(byte[]), DbType.Binary);
-        private readonly RelationalTypeMapping _varbinarymax = new RelationalTypeMapping("varbinary(8000)", typeof(byte[]), DbType.Binary);
+        private readonly MySqlMaxLengthMapping _varbinary450 = new MySqlMaxLengthMapping("blob", typeof(byte[]), DbType.Binary);
+        private readonly RelationalTypeMapping _varbinarymax = new RelationalTypeMapping("longblob", typeof(byte[]), DbType.Binary);
 
 
         private readonly RelationalTypeMapping _uniqueidentifier = new RelationalTypeMapping("char(38)", typeof(Guid));

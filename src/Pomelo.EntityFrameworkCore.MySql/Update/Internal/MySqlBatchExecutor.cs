@@ -39,8 +39,14 @@ namespace Microsoft.EntityFrameworkCore.Update.Internal
                 {
                     commandbatch.Execute(connection);
                     // Fixed Issue #1: DataReader conflicted when added multiple entities
-                    (connection.DbConnection as MySqlConnection).Reader.Dispose();
-                    (connection.DbConnection as MySqlConnection).Reader = null;
+                    try
+                    {
+                        (connection.DbConnection as MySqlConnection).Reader.Dispose();
+                        (connection.DbConnection as MySqlConnection).Reader = null;
+                    }
+                    catch
+                    {
+                    }
                     rowsAffected += commandbatch.ModificationCommands.Count;
                 }
 
