@@ -4,9 +4,11 @@
 using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
 using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal;
@@ -14,11 +16,9 @@ using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.EntityFrameworkCore.Query.Sql.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using Microsoft.EntityFrameworkCore.Update;
 using Microsoft.EntityFrameworkCore.Update.Internal;
 using Microsoft.EntityFrameworkCore.Utilities;
 using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
@@ -46,6 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddScoped<MySqlBatchExecutor>()
                 .AddScoped(p => GetProviderServices(p).BatchExecutor)
                 .AddScoped<MySqlConventionSetBuilder>()
+                .AddScoped<TableNameFromDbSetConvention>()
                 .AddScoped<IMySqlUpdateSqlGenerator, MySqlUpdateSqlGenerator>()
                 .AddScoped<MySqlModificationCommandBatchFactory>()
                 .AddScoped<MySqlDatabaseProviderServices>()
