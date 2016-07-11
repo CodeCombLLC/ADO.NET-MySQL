@@ -34,7 +34,7 @@ namespace MySqlAdoSample
 
 You can also use mysql in Entity Framework Core now, We have implemented MySQL Entity Framework Core interfaces. By using a few of lines to use Entity Framework Core with MySQL database, There is a console application sample for accessing MySQL database by using Entity Framework:
 
-```
+```C#
 using System;
 using System.Collections.Generic;
 using System.Linq;
