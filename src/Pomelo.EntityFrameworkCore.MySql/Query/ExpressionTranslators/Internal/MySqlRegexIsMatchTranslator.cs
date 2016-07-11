@@ -1,5 +1,5 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+﻿// Copyright (c) Pomelo Foundation. All rights reserved.
+// Licensed under the MIT. See LICENSE in the project root for license information.
 
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,12 +12,6 @@ using Microsoft.EntityFrameworkCore.Query.Expressions.Internal;
 // ReSharper disable once CheckNamespace
 namespace Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal
 {
-    /// <summary>
-    /// Translates Regex.IsMatch calls into PostgreSQL regex expressions for database-side processing.
-    /// </summary>
-    /// <remarks>
-    /// http://www.postgresql.org/docs/current/static/functions-matching.html
-    /// </remarks>
     public class MySqlRegexIsMatchTranslator : IMethodCallTranslator
     {
         static readonly MethodInfo IsMatch;

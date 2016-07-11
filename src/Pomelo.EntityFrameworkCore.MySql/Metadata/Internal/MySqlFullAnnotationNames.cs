@@ -1,4 +1,7 @@
-﻿namespace Microsoft.EntityFrameworkCore.Metadata.Internal
+﻿// Copyright (c) Pomelo Foundation. All rights reserved.
+// Licensed under the MIT. See LICENSE in the project root for license information.
+
+namespace Microsoft.EntityFrameworkCore.Metadata.Internal
 {
     public class MySqlFullAnnotationNames : RelationalFullAnnotationNames
     {

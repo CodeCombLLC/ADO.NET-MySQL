@@ -1,4 +1,7 @@
-﻿//using System;
+﻿// Copyright (c) Pomelo Foundation. All rights reserved.
+// Licensed under the MIT. See LICENSE in the project root for license information.
+
+//using System;
 //using System.Collections.Generic;
 //using System.Linq;
 //using System.Threading.Tasks;
@@ -8,7 +11,7 @@
 //using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 //namespace Microsoft.EntityFrameworkCore.Metadata
-//{ 
+//{
 //    public class MySqlPropertyAnnotations : RelationalPropertyAnnotations, IMySqlPropertyAnnotations
 //    {
 //        public MySqlPropertyAnnotations([NotNull] IProperty property, [CanBeNull] string providerPrefix) : base(property, MySqlFullAnnotationNames.Instance)
@@ -34,7 +37,8 @@
 
 //                return value ?? Property.DeclaringEntityType.Model.MySql().ValueGenerationStrategy;
 //            }
-//            [param: CanBeNull] set { SetValueGenerationStrategy(value); }
+//            [param: CanBeNull]
+//            set { SetValueGenerationStrategy(value); }
 //        }
 
 //        protected virtual bool SetValueGenerationStrategy(MySqlValueGenerationStrategy? value)
@@ -49,7 +53,7 @@
 //                        || (propertyType == typeof(byte?))))
 //                {
 //                    throw new ArgumentException("Bad identity type");
-//                        //Property.Name, Property.DeclaringEntityType.Name, propertyType.Name));
+//                    //Property.Name, Property.DeclaringEntityType.Name, propertyType.Name));
 //                }
 //            }
 

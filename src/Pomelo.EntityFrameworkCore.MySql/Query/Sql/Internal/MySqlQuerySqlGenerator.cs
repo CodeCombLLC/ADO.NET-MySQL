@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+﻿// Copyright (c) Pomelo Foundation. All rights reserved.
+// Licensed under the MIT. See LICENSE in the project root for license information.
 
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace Microsoft.EntityFrameworkCore.Query.Sql.Internal
 
         protected override void GenerateTop([NotNull]SelectExpression selectExpression)
         {
-            // No TOP() in PostgreSQL, see GenerateLimitOffset
+           
         }
 
         public override Expression VisitTable(TableExpression tableExpression)
@@ -91,23 +91,6 @@ namespace Microsoft.EntityFrameworkCore.Query.Sql.Internal
         public override Expression VisitSum(SumExpression sumExpression)
         {
             base.VisitSum(sumExpression);
-
-            // In PostgreSQL SUM() doesn't return the same type as its argument for smallint, int and bigint.
-            // Cast to get the same type.
-            // http://www.postgresql.org/docs/current/static/functions-aggregate.html
-            /*if (sumExpression.Type == typeof(short))
-            {
-                Sql.Append("::INT2");
-            }
-            else if (sumExpression.Type == typeof (int))
-            {
-                Sql.Append("::INT4");
-            }
-            else if (sumExpression.Type == typeof(long))
-            {
-                Sql.Append("::INT8");
-            }
-            */
             return sumExpression;
         }
 
@@ -130,8 +113,7 @@ namespace Microsoft.EntityFrameworkCore.Query.Sql.Internal
             
             return expr;
         }
-
-        // See http://www.postgresql.org/docs/current/static/functions-matching.html
+        
         public Expression VisitRegexMatch([NotNull] RegexMatchExpression regexMatchExpression)
         {
             Check.NotNull(regexMatchExpression, nameof(regexMatchExpression));
@@ -156,7 +138,6 @@ namespace Microsoft.EntityFrameworkCore.Query.Sql.Internal
                 Sql.Append('n');
             }
             else if (!options.HasFlag(RegexOptions.Singleline)) {
-                // In .NET's default mode, . doesn't match newlines but PostgreSQL it does.
                 Sql.Append('p');
             }
 

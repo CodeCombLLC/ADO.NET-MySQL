@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Pomelo Foundation. All rights reserved.
+// Licensed under the MIT. See LICENSE in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
@@ -14,20 +17,6 @@ using Pomelo.Data.MySql;
 namespace Microsoft.EntityFrameworkCore.Update.Internal
 {
     using RelationalStrings = Microsoft.EntityFrameworkCore.Internal.RelationalStrings;
-
-    /// <remarks>
-    /// The usual ModificationCommandBatch implementation is <see cref="AffectedCountModificationCommandBatch"/>,
-    /// which relies on <see cref="SqlGenerationHelper.AppendSelectAffectedCountCommand"/> to fetch the number of
-    /// rows modified via SQL.
-    ///
-    /// PostgreSQL actually has no way of selecting the modified row count.
-    /// SQL defines GET DIAGNOSTICS which should provide this, but in PostgreSQL it's only available
-    /// in PL/pgSQL. See http://www.postgresql.org/docs/9.4/static/unsupported-features-sql-standard.html,
-    /// identifier F121-01.
-    ///
-    /// Instead, the affected row count can be accessed in the PostgreSQL protocol itself, which seems
-    /// cleaner and more efficient anyway (no additional query).
-    /// </remarks>
     public class MySqlModificationCommandBatch : AffectedCountModificationCommandBatch
     {
 
