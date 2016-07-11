@@ -63,6 +63,15 @@ namespace MySqlTest
                 // Detect changes test
                 blog.Title = "Changed Title";
                 context.SaveChanges();
+
+                // Output data
+                var ret = context.Blogs.ToList();
+                foreach (var x in ret)
+                {
+                    Console.WriteLine($"{ x.Id } { x.Title }");
+                    x.Title = "Hello MySql";
+                }
+                context.SaveChanges();
             }
         }
     }
