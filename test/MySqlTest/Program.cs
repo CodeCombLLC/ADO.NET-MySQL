@@ -21,7 +21,7 @@ namespace MySqlTest
     
     public class Blog
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         [MaxLength(32)]
         public string Title { get; set; }
@@ -30,6 +30,8 @@ namespace MySqlTest
         public int UserId { get; set; }
 
         public virtual User User { get; set; }
+
+        public string Content { get; set; }
     }
 
     public class MyContext : DbContext
