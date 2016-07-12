@@ -33,7 +33,7 @@ namespace Microsoft.EntityFrameworkCore.Migrations
             Check.NotNull(builder, nameof(builder));
 
             var createDatabaseOperation = operation as MySqlCreateDatabaseOperation;
-            if (createDatabaseOperation!= null)
+            if (createDatabaseOperation != null)
             {
                 Generate(createDatabaseOperation, model, builder);
                 builder.EndCommand();
@@ -108,7 +108,7 @@ namespace Microsoft.EntityFrameworkCore.Migrations
             else if (isSerial)
             {
                 builder.Append(" SET DEFAULT ");
-                
+
                 switch (type)
                 {
                     case "smallint":
@@ -226,14 +226,14 @@ namespace Microsoft.EntityFrameworkCore.Migrations
             Check.NotNull(builder, nameof(builder));
 
             builder
-                .AppendLine("CREATE OR REPLACE FUNCTION pg_temp.__ef_ensure_schema () RETURNS VOID AS $$")
-                .Append("  BEGIN IF NOT EXISTS (SELECT 1 FROM pg_namespace WHERE nspname='").Append(operation.Name).AppendLine("') THEN")
-                .Append("    CREATE SCHEMA ").Append(operation.Name).AppendLine(";")
-                .AppendLine("  END IF; END")
-                .AppendLine("$$ LANGUAGE 'plpgsql';")
+                .AppendLine($"CREATE OR REPLACE FUNCTION mysql_ef_ensure_schema() RETURNS VOID")
+                .AppendLine($"BEGIN")
+                .AppendLine($"    IF NOT EXISTS(SELECT 1 FROM `information_schema`.`SCHEMATA` where  `SCHEMA_NAME` = '{ operation.Name }')")
+                .AppendLine($"    THEN")
+                .AppendLine($"        CREATE SCHEMA { operation.Name };")
+                .AppendLine($"    END IF;")
+                .AppendLine($"END")
                 .AppendLine(SqlGenerationHelper.BatchTerminator);
-
-            builder.Append("SELECT pg_temp.__ef_ensure_schema()").AppendLine(SqlGenerationHelper.BatchTerminator);
         }
 
         public virtual void Generate(MySqlCreateDatabaseOperation operation, IModel model, MigrationCommandListBuilder builder)
