@@ -21,6 +21,7 @@ namespace MySqlTest
     {
         public Guid Id { get; set; }
 
+        [MaxLength(32)]
         public string Title { get; set; }
 
         [ForeignKey("User")]

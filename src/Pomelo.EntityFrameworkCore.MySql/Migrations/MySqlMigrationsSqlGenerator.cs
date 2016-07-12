@@ -295,7 +295,7 @@ namespace Microsoft.EntityFrameworkCore.Migrations
             if (type == null)
             {
                 var property = FindProperty(model, schema, table, name);
-                type = TypeMapper.FindMapping(property.ClrType).StoreType;
+                type = TypeMapper.FindMapping(property).StoreType;
             }
 
             // TODO: Maybe implement computed columns via functions?

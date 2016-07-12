@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
@@ -32,23 +33,25 @@ namespace Microsoft.EntityFrameworkCore.Storage.Internal
         private readonly RelationalTypeMapping _int = new RelationalTypeMapping("int", typeof(int), DbType.Int32);
         private readonly RelationalTypeMapping _smallint = new RelationalTypeMapping("smallint", typeof(short), DbType.Int16);
         private readonly RelationalTypeMapping _tinyint = new RelationalTypeMapping("tinyint unsigned", typeof(byte), DbType.Byte);
-        
-        
+
+
         private readonly RelationalTypeMapping _rowversion = new RelationalTypeMapping("TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", typeof(byte[]), DbType.Binary);
         private readonly MySqlMaxLengthMapping _nchar = new MySqlMaxLengthMapping("nchar", typeof(string), DbType.StringFixedLength);
         private readonly MySqlMaxLengthMapping _nvarchar = new MySqlMaxLengthMapping("nvarchar", typeof(string));
         private readonly RelationalTypeMapping _varcharmax = new MySqlMaxLengthMapping("longtext", typeof(string), DbType.AnsiString);
-        
+
         private readonly MySqlMaxLengthMapping _varchar = new MySqlMaxLengthMapping("varchar", typeof(string), DbType.AnsiString);
-        private readonly MySqlMaxLengthMapping _varchar450 = new MySqlMaxLengthMapping("longtext", typeof(string), DbType.AnsiString);
+        private readonly MySqlMaxLengthMapping _varchar450 = new MySqlMaxLengthMapping("varchar(450)", typeof(string), DbType.AnsiString);
         private readonly RelationalTypeMapping _varbinary = new RelationalTypeMapping("varbinary", typeof(byte[]), DbType.Binary);
-        private readonly MySqlMaxLengthMapping _varbinary450 = new MySqlMaxLengthMapping("blob", typeof(byte[]), DbType.Binary);
+        private readonly MySqlMaxLengthMapping _varbinary450 = new MySqlMaxLengthMapping("varbinary(450)", typeof(byte[]), DbType.Binary);
         private readonly RelationalTypeMapping _varbinarymax = new RelationalTypeMapping("longblob", typeof(byte[]), DbType.Binary);
 
 
         private readonly RelationalTypeMapping _uniqueidentifier = new RelationalTypeMapping("char(38)", typeof(Guid));
         private readonly RelationalTypeMapping _time = new RelationalTypeMapping("time(6)", typeof(TimeSpan), DbType.Time);
 
+        private readonly ConcurrentDictionary<int, RelationalTypeMapping> _boundedStringMappings = new ConcurrentDictionary<int, RelationalTypeMapping>();
+        private readonly ConcurrentDictionary<int, RelationalTypeMapping> _boundedBinaryMappings = new ConcurrentDictionary<int, RelationalTypeMapping>();
 
 
         readonly Dictionary<string, RelationalTypeMapping> _simpleNameMappings;
@@ -113,9 +116,63 @@ namespace Microsoft.EntityFrameworkCore.Storage.Internal
                     { typeof(decimal), _decimal },
                     { typeof(TimeSpan), _time }
                 };
+
+            ByteArrayMapper
+                = new ByteArrayRelationalTypeMapper(
+                    8000,
+                    _varbinarymax,
+                    _varbinarymax,
+                    _varbinary450,
+                    _rowversion, size => new MySqlMaxLengthMapping(
+                        "varbinary(" + size + ")",
+                        typeof(byte[]),
+                        DbType.Binary,
+                        unicode: false,
+                        size: size,
+                        hasNonDefaultUnicode: false,
+                        hasNonDefaultSize: true));
+
+            StringMapper
+                = new StringRelationalTypeMapper(
+                    4000,
+                    _varcharmax,
+                    _varcharmax,
+                    _varchar450,
+                    size => new MySqlMaxLengthMapping(
+                        "varchar(" + size + ")",
+                        typeof(string),
+                        dbType: DbType.AnsiString,
+                        unicode: false,
+                        size: size,
+                        hasNonDefaultUnicode: true,
+                        hasNonDefaultSize: true),
+                    4000,
+                    _varcharmax,
+                    _varcharmax,
+                    _varchar450,
+                    size => new MySqlMaxLengthMapping(
+                        "varchar(" + size + ")",
+                        typeof(string),
+                        dbType: null,
+                        unicode: true,
+                        size: size,
+                        hasNonDefaultUnicode: false,
+                        hasNonDefaultSize: true));
         }
 
-        
+        protected override IReadOnlyDictionary<string, RelationalTypeMapping> GetStoreTypeMappings()
+        {
+            return _simpleNameMappings;
+        }
+
+        protected override IReadOnlyDictionary<Type, RelationalTypeMapping> GetClrTypeMappings()
+        {
+            return _simpleMappings;
+        }
+
+        public override IByteArrayRelationalTypeMapper ByteArrayMapper { get; }
+
+        public override IStringRelationalTypeMapper StringMapper { get; }
 
         protected override string GetColumnType(IProperty property) => property.MySql().ColumnType;
 
@@ -130,35 +187,17 @@ namespace Microsoft.EntityFrameworkCore.Storage.Internal
                     : base.FindMapping(clrType));
         }
 
-        public override RelationalTypeMapping FindMapping(IProperty property)
+        protected override RelationalTypeMapping FindCustomMapping([NotNull] IProperty property)
         {
             Check.NotNull(property, nameof(property));
 
-            return FindMapping(property.ClrType);
+            var clrType = property.ClrType.UnwrapEnumType();
+
+            return clrType == typeof(string)
+                ? StringMapper.FindMapping(true, property.IsKey() || property.IsIndex(), property.GetMaxLength())
+                : clrType == typeof(byte[])
+                    ? ByteArrayMapper.FindMapping(false, property.IsKey() || property.IsIndex(), property.GetMaxLength())
+                    : null;
         }
-
-        protected override IReadOnlyDictionary<string, RelationalTypeMapping> GetStoreTypeMappings()
-        {
-            return _simpleNameMappings;
-        }
-
-        protected override IReadOnlyDictionary<Type, RelationalTypeMapping> GetClrTypeMappings()
-        {
-            return _simpleMappings;
-        }
-
-        /*static Type GetTypeHandlerTypeArgument(Type handler)
-        {
-            while (!handler.GetTypeInfo().IsGenericType || handler.GetGenericTypeDefinition() != typeof(TypeHandler<>))
-            {
-                handler = handler.GetTypeInfo().BaseType;
-                if (handler == null)
-                {
-                    throw new Exception("MySql type handler doesn't inherit from TypeHandler<>?");
-                }
-            }
-
-            return handler.GetGenericArguments()[0];
-        }*/
     }
 }

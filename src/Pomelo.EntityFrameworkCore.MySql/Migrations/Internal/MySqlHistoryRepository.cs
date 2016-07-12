@@ -3,11 +3,16 @@
 
 using System;
 using System.Text;
+using System.Linq;
+using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.EntityFrameworkCore.Migrations.Internal
@@ -37,6 +42,13 @@ namespace Microsoft.EntityFrameworkCore.Migrations.Internal
                   SqlGenerationHelper)
         {
             _connection = connection;
+        }
+
+        protected override void ConfigureTable([NotNull] EntityTypeBuilder<HistoryRow> history)
+        {
+            base.ConfigureTable(history);
+            history.Property(h => h.MigrationId).HasMaxLength(150);
+            history.Property(h => h.ProductVersion).HasMaxLength(32).IsRequired();
         }
 
         protected override string ExistsSql
