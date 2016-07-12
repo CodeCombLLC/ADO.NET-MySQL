@@ -309,7 +309,7 @@ namespace Pomelo.Data.MySql
       if (charSet != null)
         Encoding = CharSetMap.GetEncoding(Version, charSet);
       else
-        Encoding = CharSetMap.GetEncoding(Version, "latin1");
+        Encoding = CharSetMap.GetEncoding(Version, "utf8");
 
       handler.Configure();
     }

@@ -18,7 +18,7 @@ namespace MySqlTest
 
         public DateTimeOffset dto_test { get; set; }
     }
-    
+
     public class Blog
     {
         public string Id { get; set; }
@@ -61,9 +61,9 @@ namespace MySqlTest
                 context.Database.EnsureCreated();
 
                 // Init sample data
-                var user = new User { Name = "Yuuko", dto_test = new DateTimeOffset(new DateTime(2000,1,1), new TimeSpan(1,0,0)) };
+                var user = new User { Name = "Yuuko", dto_test = new DateTimeOffset(new DateTime(2000, 1, 1), new TimeSpan(1, 0, 0)) };
                 context.Add(user);
-                var blog = new Blog { Title = "Blog Title", UserId = user.UserId };
+                var blog = new Blog { Id = "blog-title", Title = "Blog Title", UserId = user.UserId };
                 context.Add(blog);
                 context.SaveChanges();
 
