@@ -11,7 +11,8 @@ namespace MySqlTest
 {
     public class User
     {
-        public Guid Id { get; set; }
+        [Key]
+        public int UserId { get; set; }
 
         [MaxLength(64)]
         public string Name { get; set; }
@@ -25,7 +26,7 @@ namespace MySqlTest
         public string Title { get; set; }
 
         [ForeignKey("User")]
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
 
         public virtual User User { get; set; }
     }
@@ -59,7 +60,7 @@ namespace MySqlTest
                 // Init sample data
                 var user = new User { Name = "Yuuko" };
                 context.Add(user);
-                var blog = new Blog { Title = "Blog Title", UserId = user.Id };
+                var blog = new Blog { Title = "Blog Title", UserId = user.UserId };
                 context.Add(blog);
                 context.SaveChanges();
 
