@@ -510,6 +510,17 @@ namespace Pomelo.Data.MySql
             return Convert.ToDouble(v.Value);
         }
 
+        public override T GetFieldValue<T>(int ordinal)
+        {
+            var type = typeof(T);
+            if (type.FullName.IndexOf("System.JsonObject`1") >= 0)
+            {
+                JsonObject value = (JsonObject)GetValue(ordinal);
+                return (T)Activator.CreateInstance(type, value.Json);
+            }
+            return base.GetFieldValue<T>(ordinal);
+        }
+
         public Type GetFieldType(string column)
         {
             return GetFieldType(GetOrdinal(column));
@@ -716,6 +727,11 @@ namespace Pomelo.Data.MySql
                     return val;
                 else
                     return dt.GetDateTime();
+            }
+
+            if (val is MySqlJson)
+            {
+                return new JsonObject(val.Value.ToString());
             }
 
             return val.Value;

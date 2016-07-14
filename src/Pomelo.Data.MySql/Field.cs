@@ -368,6 +368,8 @@ namespace Pomelo.Data.MySql
           return new MySqlBinary(type, true);
         case MySqlDbType.Guid:
           return new MySqlGuid();
+        case MySqlDbType.JSON:
+            return new MySqlJson();
         default:
           throw new MySqlException("Unknown data type");
       }
