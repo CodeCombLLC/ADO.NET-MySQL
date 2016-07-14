@@ -33,7 +33,7 @@ namespace MySqlTest
 
         public string Content { get; set; }
 
-        public JsonObject<string[]> Tags { get; set; } // Json storage
+        public JsonObject<List<string>> Tags { get; set; } // Json storage
     }
 
     public class MyContext : DbContext
@@ -62,20 +62,22 @@ namespace MySqlTest
                 var blog1 = new Blog {
                     Title = "Title #1",
                     UserId = user.UserId,
-                    Tags = new string[] { "ASP.NET Core", "MySQL", "Pomelo" }
+                    Tags = new List<string>() { "ASP.NET Core", "MySQL", "Pomelo" }
                 };
                 context.Add(blog1);
                 var blog2 = new Blog
                 {
                     Title = "Title #2",
                     UserId = user.UserId,
-                    Tags = new string[] { "ASP.NET Core", "MySQL" }
+                    Tags = new List<string>() { "ASP.NET Core", "MySQL" }
                 };
                 context.Add(blog2);
                 context.SaveChanges();
-
+                
                 // Detect changes test
-                blog1.Title = "Changed Title #1";
+                blog1.Tags.Object.Add("Yuuko");
+                context.ChangeTracker.DetectChanges();
+                var detect = context.ChangeTracker.Entries();
                 context.SaveChanges();
 
                 // Output data

@@ -2,19 +2,23 @@
 
 namespace System
 {
-    public class JsonObject<T>
+    public class JsonObject<T> : IEquatable<JsonObject<T>>, IEquatable<JsonObject>, IEquatable<string>
         where T : class
     {
+        private string _originalValue { get; set; }
+
         public JsonObject() { }
 
         public JsonObject(T instance)
         {
             Object = instance;
+            _originalValue = Json;
         }
 
         public JsonObject(string json)
         {
             Json = json;
+            _originalValue = Json;
         }
 
         public T Object { get; set; }
@@ -23,20 +27,49 @@ namespace System
         {
             get
             {
-                return SerializeObject(Object);
+                if (Object != null)
+                    return SerializeObject(Object);
+                else
+                    return "";
             }
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    Object = default(T);
-                else
-                    Object = DeserializeObject<T>(value);
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(value))
+                        Object = default(T);
+                    else
+                        Object = DeserializeObject<T>(value);
+                }
+                catch
+                {
+                    Object = null;
+                }
             }
         }
 
         public override string ToString()
         {
             return Json;
+        }
+
+        public bool Equals(JsonObject<T> other)
+        {
+            if (this.Json == other.Json)
+                return true;
+            return false;
+        }
+
+        public bool Equals(JsonObject other)
+        {
+            if (this.Json == other.Json)
+                return true;
+            return false;
+        }
+
+        public bool Equals(string other)
+        {
+            return Json == other;
         }
 
         public static implicit operator JsonObject<T>(string json)
