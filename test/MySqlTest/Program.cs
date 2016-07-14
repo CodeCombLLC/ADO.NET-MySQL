@@ -73,9 +73,12 @@ namespace MySqlTest
                 };
                 context.Add(blog2);
                 context.SaveChanges();
-                
+
                 // Detect changes test
-                blog1.Tags.Object.Add("Yuuko");
+                blog1.Tags.Object.Clear();
+                context.SaveChanges();
+
+                blog1.Tags.Object.Add("Pomelo");
                 context.ChangeTracker.DetectChanges();
                 var detect = context.ChangeTracker.Entries();
                 context.SaveChanges();
