@@ -3,6 +3,7 @@
 namespace System
 {
     public class JsonObject<T>
+        where T : class
     {
         public JsonObject() { }
 
