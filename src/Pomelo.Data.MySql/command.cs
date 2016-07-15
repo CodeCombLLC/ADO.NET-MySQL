@@ -302,8 +302,8 @@ namespace Pomelo.Data.MySql
                 Throw(new InvalidOperationException("Connection must be valid and open."));
 
             // Data readers have to be closed first
-            if (connection.IsInUse && !this.internallyCreated)
-                Throw(new MySqlException("There is already an open DataReader associated with this Connection which must be closed first."));
+            //if (connection.IsInUse && !this.internallyCreated)
+            //    Throw(new MySqlException("There is already an open DataReader associated with this Connection which must be closed first."));
         }
 
         /// <include file='docs/mysqlcommand.xml' path='docs/ExecuteNonQuery/*'/>
@@ -425,10 +425,10 @@ namespace Pomelo.Data.MySql
             {
 
                 //We have to recheck that there is no reader, after we got the lock
-                if (connection.Reader != null)
-                    {
-                        Throw(new MySqlException(Resources.DataReaderOpen));
-                    }
+                //if (connection.Reader != null)
+                //    {
+                //        Throw(new MySqlException(Resources.DataReaderOpen));
+                //    }
 
 #if !NETSTANDARD1_6
                 System.Transactions.Transaction curTrans = System.Transactions.Transaction.Current;

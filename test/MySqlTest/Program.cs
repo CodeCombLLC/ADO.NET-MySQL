@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 namespace MySqlTest
@@ -16,7 +14,7 @@ namespace MySqlTest
         [MaxLength(64)]
         public string Name { get; set; }
 
-        public DateTimeOffset dto_test { get; set; }
+        public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
     }
 
     public class Blog
@@ -33,7 +31,16 @@ namespace MySqlTest
 
         public string Content { get; set; }
 
-        public JsonObject<List<string>> Tags { get; set; } // Json storage
+        public JsonObject<List<string>> Tags { get; set; } // Json storage (MySQL 5.7 only)
+        
+        public JsonObject<Test> Test { get; set; }
+    }
+
+    public class Test
+    {
+        public string Hello { get; set; }
+
+        public int MySql { get; set; }
     }
 
     public class MyContext : DbContext
@@ -57,46 +64,42 @@ namespace MySqlTest
                 context.Database.EnsureCreated();
 
                 // Init sample data
-                var user = new User { Name = "Yuuko", dto_test = new DateTimeOffset(new DateTime(2000, 1, 1), new TimeSpan(1, 0, 0)) };
+                var user = new User { Name = "Yuuko" };
                 context.Add(user);
                 var blog1 = new Blog {
                     Title = "Title #1",
                     UserId = user.UserId,
-                    Tags = new List<string>() { "ASP.NET Core", "MySQL", "Pomelo" }
+                    Tags = new List<string>() { "ASP.NET Core", "MySQL", "Pomelo" },
+                    Test = new Test { Hello = "#1", MySql = 1 }
                 };
                 context.Add(blog1);
                 var blog2 = new Blog
                 {
                     Title = "Title #2",
                     UserId = user.UserId,
-                    Tags = new List<string>() { "ASP.NET Core", "MySQL" }
+                    Tags = new List<string>() { "ASP.NET Core", "MySQL" },
+                    Test = new Test { Hello = "#2", MySql = 2 }
                 };
                 context.Add(blog2);
                 context.SaveChanges();
 
-                // Detect changes test
+                // Changing and save json object #1
                 blog1.Tags.Object.Clear();
                 context.SaveChanges();
 
+                // Changing and save json object #2
                 blog1.Tags.Object.Add("Pomelo");
-                context.ChangeTracker.DetectChanges();
-                var detect = context.ChangeTracker.Entries();
                 context.SaveChanges();
 
-                // Output data
-                var ret = context.Blogs
-                    .Where(x => x.Tags.Object.Contains("Pomelo"))
-                    .ToList();
-                foreach (var x in ret)
-                {
-                    Console.WriteLine($"{ x.Id } { x.Title }");
-                    Console.Write("[Tags]: ");
-                    foreach(var y in x.Tags.Object)
-                        Console.Write(y + " ");
-                    Console.WriteLine();
-                }
-            }
+                var ret2 = context.Blogs.ToList();
 
+                // Output data
+                var readUser = context.Users
+                    .AsNoTracking()
+                    .Include(x => x.Blogs)
+                    .Last();
+                Console.WriteLine($"{readUser} has written {readUser.Blogs.Count} articles.");
+            }
             Console.Read();
         }
     }
