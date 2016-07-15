@@ -2,6 +2,7 @@
 // Licensed under the MIT. See LICENSE in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 #if NET451
@@ -81,12 +82,14 @@ namespace Pomelo.Data.MySql
 
         internal MySqlConnectionStringBuilder Settings { get; private set; }
 
-        public MySqlDataReader Reader
+        public List<MySqlDataReader> Reader
         {
             get
             {
                 if (driver == null)
                     return null;
+                if (driver.reader == null)
+                    driver.reader = new List<MySqlDataReader>();
                 return driver.reader;
             }
             set
@@ -566,14 +569,16 @@ namespace Pomelo.Data.MySql
 
             if (Reader != null)
 #if !NETSTANDARD1_6
-                Reader.Close();
+                foreach (var x in Reader)
+                    x.Close();
 #else
-                Reader.Dispose();
+                foreach (var x in Reader)
+                    x.Dispose();
 #endif
 
-                // if the reader was opened with CloseConnection then driver
-                // will be null on the second time through
-                if (driver != null)
+            // if the reader was opened with CloseConnection then driver
+            // will be null on the second time through
+            if (driver != null)
             {
 #if !NETSTANDARD1_6
                 if (driver.CurrentTransaction == null)
@@ -631,9 +636,11 @@ namespace Pomelo.Data.MySql
                 if (Reader != null)
                 {
 #if NETSTANDARD1_6
-                    Reader.Dispose();
+                    foreach(var x in Reader)
+                        x.Dispose();
 #else
-                    Reader.Close();
+                    foreach (var x in Reader)
+                        x.Close();
 #endif
                     Reader = null;
                 }

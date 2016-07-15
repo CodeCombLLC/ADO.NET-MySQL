@@ -21,7 +21,7 @@ namespace Pomelo.Data.MySql
         private bool isOpen = true;
 
         private CommandBehavior commandBehavior;
-        private MySqlCommand command;
+        public MySqlCommand command;
         internal long affectedRows;
         internal Driver driver;
         private PreparableStatement statement;

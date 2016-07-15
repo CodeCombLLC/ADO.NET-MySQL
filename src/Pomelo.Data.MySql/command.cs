@@ -360,9 +360,11 @@ namespace Pomelo.Data.MySql
             if (connection != null && connection.Reader != null)
             {
 #if !NETSTANDARD1_6
-                connection.Reader.Close();
+                foreach (var x in connection.Reader)
+                    x.Close();
 #else
-                connection.Reader.Dispose();
+                foreach (var x in connection.Reader)
+                    x.Dispose();
 #endif
                 connection.Reader = null;
             }
@@ -495,7 +497,7 @@ namespace Pomelo.Data.MySql
                 try
                 {
                     MySqlDataReader reader = new MySqlDataReader(this, statement, behavior);
-                    connection.Reader = reader;
+                    connection.Reader.Add(reader);
                     canceled = false;
                     // execute the statement
                     statement.Execute();

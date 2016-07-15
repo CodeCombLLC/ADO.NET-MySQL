@@ -7,47 +7,48 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MySqlTest
 {
-    public class User
+    public class Aaa
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
-        [MaxLength(64)]
-        public string Name { get; set; }
+        public string Test { get; set; }
 
-        public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
+        public virtual ICollection<Bbb> Bbbs { get; set; } = new List<Bbb>();
     }
 
-    public class Blog
+    public class Bbb
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
-        [MaxLength(32)]
-        public string Title { get; set; }
+        [ForeignKey("A")]
+        public int AaaId { get; set; }
 
-        [ForeignKey("User")]
-        public int UserId { get; set; }
+        public virtual Aaa A { get; set; }
 
-        public virtual User User { get; set; }
+        public string Test { get; set; }
 
-        public string Content { get; set; }
-
-        public JsonObject<List<string>> Tags { get; set; } // Json storage (MySQL 5.7 only)
-        
-        public JsonObject<Test> Test { get; set; }
+        public virtual ICollection<Ccc> Cccs { get; set; } = new List<Ccc>();
     }
 
-    public class Test
+    public class Ccc
     {
-        public string Hello { get; set; }
+        public int Id { get; set; }
 
-        public int MySql { get; set; }
+        [ForeignKey("B")]
+        public int BbbId { get; set; }
+
+        public virtual Bbb Bbb { get; set; }
+
+        public string Test { get; set; }
     }
 
     public class MyContext : DbContext
     {
-        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Aaa> Aaas { get; set; }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Bbb> Bbbs { get; set; }
+
+        public DbSet<Ccc> Cccs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder
@@ -63,42 +64,28 @@ namespace MySqlTest
                 // Create database
                 context.Database.EnsureCreated();
 
-                // Init sample data
-                var user = new User { Name = "Yuuko" };
-                context.Add(user);
-                var blog1 = new Blog {
-                    Title = "Title #1",
-                    UserId = user.UserId,
-                    Tags = new List<string>() { "ASP.NET Core", "MySQL", "Pomelo" },
-                    Test = new Test { Hello = "#1", MySql = 1 }
-                };
-                context.Add(blog1);
-                var blog2 = new Blog
-                {
-                    Title = "Title #2",
-                    UserId = user.UserId,
-                    Tags = new List<string>() { "ASP.NET Core", "MySQL" },
-                    Test = new Test { Hello = "#2", MySql = 2 }
-                };
-                context.Add(blog2);
+                var a = new Aaa();
+                context.Aaas.Add(a);
                 context.SaveChanges();
 
-                // Changing and save json object #1
-                blog1.Tags.Object.Clear();
+                var b1 = new Bbb { AaaId = a.Id };
+                var b2 = new Bbb { AaaId = a.Id };
+                context.Bbbs.Add(b1);
+                context.Bbbs.Add(b2);
                 context.SaveChanges();
 
-                // Changing and save json object #2
-                blog1.Tags.Object.Add("Pomelo");
+                var c1 = new Ccc { BbbId = b1.Id, Test = "#c1" };
+                var c2 = new Ccc { BbbId = b1.Id, Test = "#c2" };
+                var c3 = new Ccc { BbbId = b2.Id, Test = "#c3" };
+                var c4 = new Ccc { BbbId = b2.Id, Test = "#c4" };
+                context.Cccs.Add(c1);
+                context.Cccs.Add(c2);
+                context.Cccs.Add(c3);
+                context.Cccs.Add(c4);
                 context.SaveChanges();
 
-                var ret2 = context.Blogs.ToList();
-
-                // Output data
-                var readUser = context.Users
-                    .AsNoTracking()
-                    .Include(x => x.Blogs)
-                    .Last();
-                Console.WriteLine($"{readUser} has written {readUser.Blogs.Count} articles.");
+                var ret = context.Aaas.AsNoTracking().Include(x => x.Bbbs).ThenInclude(x => x.Cccs).First();
+                Console.WriteLine(ret.Bbbs.First().Cccs.Count);
             }
             Console.Read();
         }
