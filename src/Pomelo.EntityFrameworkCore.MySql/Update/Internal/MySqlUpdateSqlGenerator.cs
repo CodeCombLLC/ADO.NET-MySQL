@@ -116,22 +116,20 @@ namespace Microsoft.EntityFrameworkCore.Update.Internal
             return ResultSetMapping.LastInResultSet;
         }
 
-        
-        
+
+
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local
         private void AppendOutputClause(
             StringBuilder commandStringBuilder,
             IReadOnlyList<ColumnModification> operations)
             => commandStringBuilder
-                .AppendLine()
-                .Append("SELECT LAST_INSERT_ID();");
+                .AppendLine();
 
         protected override ResultSetMapping AppendSelectAffectedCountCommand(StringBuilder commandStringBuilder, string name,
             string schema, int commandPosition)
         {
         
             Check.NotNull(commandStringBuilder, nameof(commandStringBuilder))
-                .Append("SELECT ROW_COUNT()")
                 .Append(SqlGenerationHelper.BatchTerminator).AppendLine();
 
             return ResultSetMapping.LastInResultSet;

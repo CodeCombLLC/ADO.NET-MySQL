@@ -8,7 +8,7 @@ using Pomelo.Data.MySql;
 
 namespace Pomelo.Data.Types
 {
-  internal interface IMySqlValue
+  interface IMySqlValue
   {
     bool IsNull { get; }
     MySqlDbType MySqlDbType { get; }

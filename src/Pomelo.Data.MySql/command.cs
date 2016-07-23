@@ -92,7 +92,7 @@ namespace Pomelo.Data.MySql
         {
             Dispose(false);
         }
-        
+
 #endif
         #endregion
 
@@ -208,7 +208,7 @@ namespace Pomelo.Data.MySql
         [Category("Data")]
         [Description("The parameters collection")]
 #if !NETSTANDARD1_6
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
 #endif
         public new MySqlParameterCollection Parameters
         {
@@ -313,11 +313,11 @@ namespace Pomelo.Data.MySql
 
 #if !NETSTANDARD1_6
             int records = -1;
-      // give our interceptors a shot at it first
-      if ( connection != null && 
-           connection.commandInterceptor != null &&
-           connection.commandInterceptor.ExecuteNonQuery(CommandText, ref records))
-        return records;
+            // give our interceptors a shot at it first
+            if (connection != null &&
+                 connection.commandInterceptor != null &&
+                 connection.commandInterceptor.ExecuteNonQuery(CommandText, ref records))
+                return records;
 #endif
 
             // ok, none of our interceptors handled this so we default
@@ -396,12 +396,12 @@ namespace Pomelo.Data.MySql
         public new MySqlDataReader ExecuteReader(CommandBehavior behavior)
         {
 #if !NETSTANDARD1_6
-      // give our interceptors a shot at it first
-      MySqlDataReader interceptedReader = null;
-      if ( connection != null &&
-           connection.commandInterceptor != null && 
-           connection.commandInterceptor.ExecuteReader(CommandText, behavior, ref interceptedReader))
-        return interceptedReader;
+            // give our interceptors a shot at it first
+            MySqlDataReader interceptedReader = null;
+            if (connection != null &&
+                 connection.commandInterceptor != null &&
+                 connection.commandInterceptor.ExecuteReader(CommandText, behavior, ref interceptedReader))
+                return interceptedReader;
 #endif
 
             // interceptors didn't handle this so we fall through
@@ -435,28 +435,28 @@ namespace Pomelo.Data.MySql
 #if !NETSTANDARD1_6
                 System.Transactions.Transaction curTrans = System.Transactions.Transaction.Current;
 
-        if (curTrans != null)
-        {
-          bool inRollback = false;
-          if (driver.CurrentTransaction != null)
-            inRollback = driver.CurrentTransaction.InRollback;
-          if (!inRollback)
-          {
-            System.Transactions.TransactionStatus status = System.Transactions.TransactionStatus.InDoubt;
-            try
-            {
-              // in some cases (during state transitions) this throws
-              // an exception. Ignore exceptions, we're only interested 
-              // whether transaction was aborted or not.
-              status = curTrans.TransactionInformation.Status;
-            }
-            catch (System.Transactions.TransactionException)
-            {
-            }
-            if (status == System.Transactions.TransactionStatus.Aborted)
-              Throw(new System.Transactions.TransactionAbortedException());
-          }
-        }
+                if (curTrans != null)
+                {
+                    bool inRollback = false;
+                    if (driver.CurrentTransaction != null)
+                        inRollback = driver.CurrentTransaction.InRollback;
+                    if (!inRollback)
+                    {
+                        System.Transactions.TransactionStatus status = System.Transactions.TransactionStatus.InDoubt;
+                        try
+                        {
+                            // in some cases (during state transitions) this throws
+                            // an exception. Ignore exceptions, we're only interested 
+                            // whether transaction was aborted or not.
+                            status = curTrans.TransactionInformation.Status;
+                        }
+                        catch (System.Transactions.TransactionException)
+                        {
+                        }
+                        if (status == System.Transactions.TransactionStatus.Aborted)
+                            Throw(new System.Transactions.TransactionAbortedException());
+                    }
+                }
 #endif
                 commandTimer = new CommandTimer(connection, CommandTimeout);
 
@@ -594,10 +594,10 @@ namespace Pomelo.Data.MySql
             object val = null;
 
 #if !NETSTANDARD1_6
-      // give our interceptors a shot at it first
-      if (connection != null &&
-          connection.commandInterceptor.ExecuteScalar(CommandText, ref val))
-        return val;
+            // give our interceptors a shot at it first
+            if (connection != null &&
+                connection.commandInterceptor.ExecuteScalar(CommandText, ref val))
+                return val;
 #endif
 
             using (MySqlDataReader reader = ExecuteReader())
@@ -896,9 +896,9 @@ namespace Pomelo.Data.MySql
         partial void PartialClone(MySqlCommand clone);
 #if !(NETSTANDARD1_6)
         object ICloneable.Clone()
-    {
-      return this.Clone();
-    }
+        {
+            return this.Clone();
+        }
 #endif
         #endregion
 
@@ -987,19 +987,19 @@ namespace Pomelo.Data.MySql
             GC.SuppressFinalize(this);
         }
 #else
-    public new void Dispose()
-    {
-      Dispose(true);
-      GC.SuppressFinalize(this);
-    }
+        public new void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-    protected override void Dispose(bool disposing)
-    {
-      if (statement != null && statement.IsPrepared)
-        statement.CloseStatement();
+        protected override void Dispose(bool disposing)
+        {
+            if (statement != null && statement.IsPrepared)
+                statement.CloseStatement();
 
-      base.Dispose(disposing);
-    }
+            base.Dispose(disposing);
+        }
 
 #endif
     }
