@@ -39,6 +39,7 @@ namespace Pomelo.Data.MySql
         protected IDriver handler;
         internal List<MySqlDataReader> reader = new List<MySqlDataReader>();
         private bool disposeInProgress;
+        private bool disposeComplete;
         internal bool isFabric;
 
         /// <summary>
@@ -518,7 +519,7 @@ namespace Pomelo.Data.MySql
         protected virtual void Dispose(bool disposing)
         {
             // Avoid cyclic calls to Dispose.
-            if (disposeInProgress)
+            if (disposeInProgress || disposeComplete)
                 return;
 
             disposeInProgress = true;
@@ -539,8 +540,14 @@ namespace Pomelo.Data.MySql
             }
             finally
             {
-                reader.Clear();
+                if (reader != null)
+                {
+                    foreach (var x in reader)
+                        x.Dispose();
+                    reader.Clear();
+                }
                 isOpen = false;
+                disposeComplete = true;
                 disposeInProgress = false;
             }
         }

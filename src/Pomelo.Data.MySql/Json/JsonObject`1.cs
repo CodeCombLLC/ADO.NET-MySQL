@@ -1,4 +1,5 @@
-﻿using static Newtonsoft.Json.JsonConvert;
+﻿using Newtonsoft.Json.Linq;
+using static Newtonsoft.Json.JsonConvert;
 
 namespace System
 {
@@ -53,23 +54,45 @@ namespace System
             return Json;
         }
 
+        public override bool Equals(object obj)
+        {
+            try
+            {
+                dynamic o = obj;
+                return Equals((string)o.Json);
+            }
+            catch
+            {
+                return base.Equals(obj);
+            }
+        }
+
         public bool Equals(JsonObject<T> other)
         {
-            if (this.Json == other.Json)
-                return true;
-            return false;
+            return Equals(other.Json);
         }
 
         public bool Equals(JsonObject other)
         {
-            if (this.Json == other.Json)
-                return true;
-            return false;
+            return Equals(other.Json);
         }
 
         public bool Equals(string other)
         {
-            return Json == other;
+            if (!IsSameType(Json, other))
+                return false;
+            if (IsObject(Json))
+            {
+                var o1 = JObject.Parse(Json);
+                var o2 = JObject.Parse(other);
+                return JToken.DeepEquals(o1, o2);
+            }
+            else
+            {
+                var a1 = JArray.Parse(Json);
+                var a2 = JArray.Parse(other);
+                return JToken.DeepEquals(a1, a2);
+            }
         }
 
         public static implicit operator JsonObject<T>(string json)
@@ -90,6 +113,28 @@ namespace System
         public static implicit operator JsonObject<T>(JsonObject<object> obj)
         {
             return new JsonObject<T>(obj.Json);
+        }
+
+        private static bool IsObject(string json)
+        {
+            return json.TrimStart()[0] == '{';
+        }
+
+        private static bool IsSameType(string json1, string json2)
+        {
+            if (IsObject(json1) && IsObject(json2) || !IsObject(json1) && !IsObject(json2))
+                return true;
+            return false;
+        }
+
+        public static bool operator== (JsonObject<T> a, JsonObject<T> b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(JsonObject<T> a, JsonObject<T> b)
+        {
+            return !a.Equals(b);
         }
     }
 }

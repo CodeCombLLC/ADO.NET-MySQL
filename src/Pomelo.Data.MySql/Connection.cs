@@ -554,8 +554,7 @@ namespace Pomelo.Data.MySql
 
                 MySqlPoolManager.ReleaseConnection(driver);
             }
-            else
-                driver.Close();
+            driver.Close();
             driver = null;
         }
 

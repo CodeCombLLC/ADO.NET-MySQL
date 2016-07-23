@@ -4,6 +4,7 @@ using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Pomelo.Data.MySql;
 
 namespace MySqlTest
 {
@@ -26,6 +27,8 @@ namespace MySqlTest
         public virtual Aaa A { get; set; }
 
         public string Test { get; set; }
+
+        public JsonObject<string[]> Json { get; set; }
 
         public virtual ICollection<Ccc> Cccs { get; set; } = new List<Ccc>();
     }
@@ -63,7 +66,7 @@ namespace MySqlTest
             {
                 // Create database
                 context.Database.EnsureCreated();
-
+                
                 var a = new Aaa();
                 context.Aaas.Add(a);
                 context.SaveChanges();

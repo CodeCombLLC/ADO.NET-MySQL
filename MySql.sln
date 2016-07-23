@@ -18,6 +18,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MySqlTest", "test\MySqlTest
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Pomelo.Data.MySql", "src\Pomelo.Data.MySql\Pomelo.Data.MySql.xproj", "{2FCB00E0-5CCB-40BD-A3D6-7B554E883AA3}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MySqlAspNetTest", "test\MySqlAspNetTest\MySqlAspNetTest.xproj", "{909C4CC1-E744-4D64-8B19-B85406B5FA9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		debug_x86|Any CPU = debug_x86|Any CPU
@@ -50,6 +52,14 @@ Global
 		{2FCB00E0-5CCB-40BD-A3D6-7B554E883AA3}.release_x86|Any CPU.Build.0 = Release|Any CPU
 		{2FCB00E0-5CCB-40BD-A3D6-7B554E883AA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FCB00E0-5CCB-40BD-A3D6-7B554E883AA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{909C4CC1-E744-4D64-8B19-B85406B5FA9B}.debug_x86|Any CPU.ActiveCfg = Debug|Any CPU
+		{909C4CC1-E744-4D64-8B19-B85406B5FA9B}.debug_x86|Any CPU.Build.0 = Debug|Any CPU
+		{909C4CC1-E744-4D64-8B19-B85406B5FA9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{909C4CC1-E744-4D64-8B19-B85406B5FA9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{909C4CC1-E744-4D64-8B19-B85406B5FA9B}.release_x86|Any CPU.ActiveCfg = Release|Any CPU
+		{909C4CC1-E744-4D64-8B19-B85406B5FA9B}.release_x86|Any CPU.Build.0 = Release|Any CPU
+		{909C4CC1-E744-4D64-8B19-B85406B5FA9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{909C4CC1-E744-4D64-8B19-B85406B5FA9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +68,6 @@ Global
 		{FC2779F0-2A2A-4BE2-B5A8-FDA31A4A404A} = {33D11211-4659-41E8-8D47-485A62C1B635}
 		{60FDC718-661A-4420-876B-12B30A7EAB2D} = {DD00FC85-DF3D-4264-8D4E-09834F5687C2}
 		{2FCB00E0-5CCB-40BD-A3D6-7B554E883AA3} = {33D11211-4659-41E8-8D47-485A62C1B635}
+		{909C4CC1-E744-4D64-8B19-B85406B5FA9B} = {DD00FC85-DF3D-4264-8D4E-09834F5687C2}
 	EndGlobalSection
 EndGlobal

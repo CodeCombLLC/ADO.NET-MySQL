@@ -1,6 +1,7 @@
 // Copyright (c) Pomelo Foundation. All rights reserved.
 // Licensed under the MIT. See LICENSE in the project root for license information.
 
+using System.Linq;
 using System.Data.Common;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -13,18 +14,22 @@ namespace Microsoft.EntityFrameworkCore.Storage.Internal
 {
     public class MySqlRelationalConnection : RelationalConnection
     {
+        private static System.Collections.Generic.List<MySqlRelationalConnection> test = new System.Collections.Generic.List<MySqlRelationalConnection>();
+
         public MySqlRelationalConnection(
             [NotNull] IDbContextOptions options,
             // ReSharper disable once SuggestBaseTypeForParameter
             [NotNull] ILogger<MySqlConnection> logger)
             : base(options, logger)
         {
+            test.Add(this);
         }
 
         private MySqlRelationalConnection(
             [NotNull] IDbContextOptions options, [NotNull] ILogger logger)
             : base(options, logger)
         {
+            test.Add(this);
         }
 
         // TODO: Consider using DbProviderFactory to create connection instance

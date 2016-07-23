@@ -808,7 +808,13 @@ namespace Pomelo.Data.MySql
         /// <returns></returns>
         public override bool IsDBNull(int i)
         {
-            return DBNull.Value == GetValue(i);
+            if (!isOpen)
+                Throw(new Exception("No current query in data reader"));
+            if (i >= FieldCount)
+                Throw(new IndexOutOfRangeException());
+
+            IMySqlValue val = GetFieldValue(i, false);
+            return val.IsNull;//原来调用 GetValue(int i)，如果是值类型，并且有值的话，会引起装箱。
         }
 
         /// <summary>
